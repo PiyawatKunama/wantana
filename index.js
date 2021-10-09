@@ -19,17 +19,12 @@ app.get("/", (req, res) => {
 app.post("/webhook", function (req, res) {
 	res.send("https://linewantana.herokuapp.com/webhook");
 
-	console.log("1", req.body.events[0].type);
-	console.log("2", req.body.events[0]);
-	console.log("3", req.body);
-
-	console.log("4", res);
-
+	console.log(req.body.events[0].type);
 	// If the user sends a message to your bot, send a reply message
 	if (req.body.events[0].type === "message") {
 		// Message data, must be stringified
 		const dataString = JSON.stringify({
-			replyToken: req.body.events[0].replyToken,
+			to: "cypxs61",
 			messages: [
 				{
 					type: "text",
@@ -51,7 +46,7 @@ app.post("/webhook", function (req, res) {
 		// Options to pass into the request
 		const webhookOptions = {
 			hostname: "api.line.me",
-			path: "/v2/bot/message/reply",
+			path: "/v2/bot/message/push",
 			method: "POST",
 			headers: headers,
 			body: dataString,
@@ -60,7 +55,6 @@ app.post("/webhook", function (req, res) {
 		// Define request
 		const request = https.request(webhookOptions, (res) => {
 			res.on("data", (d) => {
-				console.log("5", res);
 				process.stdout.write(d);
 			});
 		});
