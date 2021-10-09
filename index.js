@@ -16,7 +16,8 @@ app.get("/", (req, res) => {
 });
 
 app.post("/webhook", function (req, res) {
-	res.send("HTTP POST request sent to the webhook URL!");
+	res.send("https://linewantana.herokuapp.com/");
+
 	// If the user sends a message to your bot, send a reply message
 	if (req.body.events[0].type === "message") {
 		// Message data, must be stringified
@@ -70,4 +71,3 @@ app.post("/webhook", function (req, res) {
 app.listen(PORT, () => {
 	console.log(`Example app listening at http://localhost:${PORT}`);
 });
-
