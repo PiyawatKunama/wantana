@@ -19,8 +19,10 @@ app.get("/", (req, res) => {
 app.post("/webhook", function (req, res) {
 	res.send("https://linewantana.herokuapp.com/webhook");
 
-	console.log("jimmy");
-	console.log("jimmy", req);
+	if (req.body.events[0].type === "message") {
+		console.log("jimmy", req.body.events[0].source.userId);
+		console.log("jimmy", req);
+	}
 
 	// If the user sends a message to your bot, send a reply message
 	if (req.body.events[0].type === "message") {
