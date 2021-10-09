@@ -1,14 +1,9 @@
 const https = require("https");
 const express = require("express");
-const line = require("@line/bot-sdk");
 const app = express();
 const PORT = process.env.PORT;
 const TOKEN =
 	"4q3VKFP+VtVmHbT3pwi1NMBfS0XM/+mOsl/pjGi8706ZTZnfTzU/xApq8cGDCeTo7NPe8vMz4DNIOuncCHbvMnvOXuvPQ0enwcmmhgUFBP69jDS43cKrNK3zGQZ7aARoy55SOfFttTqsicRpJzrMbAdB04t89/1O/w1cDnyilFU=";
-
-const client = new line.Client({
-	channelAccessToken: "aebf6b699255efc1faece3ee6c1c82ad",
-});
 
 app.use(express.json());
 app.use(
@@ -24,28 +19,13 @@ app.get("/", (req, res) => {
 app.post("/webhook", function (req, res) {
 	res.send("https://linewantana.herokuapp.com/webhook");
 
-	console.log("qqq", req.body.events[0]);
-
+	console.log(req.body.events[0].type);
 	// If the user sends a message to your bot, send a reply message
 	if (req.body.events[0].type === "message") {
 		// Message data, must be stringified
-
-		const message = {
-			type: "text",
-			text: "Hello World!",
-		};
-
-		client
-			.pushMessage("11112221333144415551", message)
-			.then(() => {
-				console.log("11112221333144415551");
-			})
-			.catch((err) => {
-				console.log(err);
-			});
-
 		const dataString = JSON.stringify({
 			replyToken: req.body.events[0].replyToken,
+			to: "cypxs61",
 			messages: [
 				{
 					type: "text",
@@ -76,7 +56,6 @@ app.post("/webhook", function (req, res) {
 		// Define request
 		const request = https.request(webhookOptions, (res) => {
 			res.on("data", (d) => {
-				console.log(d);
 				process.stdout.write(d);
 			});
 		});
