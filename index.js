@@ -1,7 +1,8 @@
 const https = require("https");
 const express = require("express");
 const app = express();
-const PORT = process.env.PORT;
+const PORT = process.env.PORT || 3000;
+
 const TOKEN =
 	"4q3VKFP+VtVmHbT3pwi1NMBfS0XM/+mOsl/pjGi8706ZTZnfTzU/xApq8cGDCeTo7NPe8vMz4DNIOuncCHbvMnvOXuvPQ0enwcmmhgUFBP69jDS43cKrNK3zGQZ7aARoy55SOfFttTqsicRpJzrMbAdB04t89/1O/w1cDnyilFU=";
 
@@ -12,8 +13,58 @@ app.use(
 	})
 );
 
-app.get("/", (req, res) => {
-	res.sendStatus(200);
+app.get("/", function (req, res) {
+	res.sendFile("test.html", { root: __dirname });
+});
+
+app.post("/test", (req, res) => {
+	res.send("https://linewantana.herokuapp.com/webhook");
+
+	var lineText = req.body.lineText;
+
+	console.log(lineText);
+
+	const dataString = JSON.stringify({
+		to: "U073fa6415077355c3521c91f6ac71a6e",
+		messages: [
+			{
+				type: "text",
+				text: `${lineText}`,
+			},
+		],
+	});
+
+	// Request header
+	const headers = {
+		"Content-Type": "application/json",
+		Authorization: "Bearer " + TOKEN,
+	};
+
+	// Options to pass into the request
+	const webhookOptions = {
+		hostname: "api.line.me",
+		path: "/v2/bot/message/push",
+		method: "POST",
+		headers: headers,
+		body: dataString,
+	};
+
+	// Define request
+	const request = https.request(webhookOptions, (res) => {
+		res.on("data", (d) => {
+			console.log(d);
+			process.stdout.write(d);
+		});
+	});
+
+	// Handle error
+	request.on("error", (err) => {
+		console.error(err);
+	});
+
+	// Send data
+	request.write(dataString);
+	request.end();
 });
 
 app.post("/webhook", function (req, res) {
@@ -31,10 +82,6 @@ app.post("/webhook", function (req, res) {
 				{
 					type: "text",
 					text: "Hello, world1",
-				},
-				{
-					type: "text",
-					text: "Hello, world2",
 				},
 			],
 		});
@@ -73,6 +120,6 @@ app.post("/webhook", function (req, res) {
 	}
 });
 
-app.listen(process.env.PORT, () => {
+app.listen(PORT, () => {
 	console.log(`Example app listening at http://localhost:${PORT}`);
 });
