@@ -1,13 +1,11 @@
 const https = require("https");
 const express = require("express");
 const app = express();
-
-const PORT = process.env.PORT || 3000;
+const PORT = process.env.PORT;
 const TOKEN =
 	"4q3VKFP+VtVmHbT3pwi1NMBfS0XM/+mOsl/pjGi8706ZTZnfTzU/xApq8cGDCeTo7NPe8vMz4DNIOuncCHbvMnvOXuvPQ0enwcmmhgUFBP69jDS43cKrNK3zGQZ7aARoy55SOfFttTqsicRpJzrMbAdB04t89/1O/w1cDnyilFU=";
 
 app.use(express.json());
-
 app.use(
 	express.urlencoded({
 		extended: true,
@@ -21,14 +19,11 @@ app.get("/", (req, res) => {
 app.post("/webhook", function (req, res) {
 	res.send("https://linewantana.herokuapp.com/webhook");
 
-	if (req.body.events[0].type === "follow") {
-		console.log("jimmy", req.body.events[0].source.userId);
-		console.log("jimmy", req.body);
-	}
-
 	// If the user sends a message to your bot, send a reply message
 	if (req.body.events[0].type === "message") {
 		// Message data, must be stringified
+		console.log("jimmy", req.body.events[0].source.userId);
+
 		const dataString = JSON.stringify({
 			replyToken: req.body.events[0].replyToken,
 			messages: [
@@ -52,7 +47,7 @@ app.post("/webhook", function (req, res) {
 		// Options to pass into the request
 		const webhookOptions = {
 			hostname: "api.line.me",
-			path: "/v2/bot/message/push",
+			path: "/v2/bot/message/reply",
 			method: "POST",
 			headers: headers,
 			body: dataString,
@@ -61,6 +56,7 @@ app.post("/webhook", function (req, res) {
 		// Define request
 		const request = https.request(webhookOptions, (res) => {
 			res.on("data", (d) => {
+				console.log(d);
 				process.stdout.write(d);
 			});
 		});
