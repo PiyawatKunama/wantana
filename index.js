@@ -30,11 +30,11 @@ app.post("/webhook", function (req, res) {
 			messages: [
 				{
 					type: "text",
-					text: "Hello, user",
+					text: "Hello, world1",
 				},
 				{
 					type: "text",
-					text: "May I help you?",
+					text: "Hello, world2",
 				},
 			],
 		});
@@ -48,7 +48,7 @@ app.post("/webhook", function (req, res) {
 		// Options to pass into the request
 		const webhookOptions = {
 			hostname: "api.line.me",
-			path: "/v2/bot/message/reply",
+			path: "/v2/bot/message/push",
 			method: "POST",
 			headers: headers,
 			body: dataString,
