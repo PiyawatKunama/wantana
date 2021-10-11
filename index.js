@@ -75,11 +75,17 @@ app.post("/webhook", function (req, res) {
 		console.log("jim", req);
 		console.log("jim", req.body);
 		console.log("jim", req.body.events);
+
+		console.log("jim", req.body.locals);
 	}
 
 	if (req.body.events[0].type === "message") {
 		// Message data, must be stringified
 
+		console.log("jim1", req);
+		console.log("jim1", req.body);
+		console.log("jim1", req.body.events);
+		console.log("jimres", res);
 		const dataString = JSON.stringify({
 			to: req.body.events[0].source.userId,
 			messages: [
