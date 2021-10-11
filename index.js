@@ -85,9 +85,8 @@ app.post("/webhook", function (req, res) {
 		if (registerText === "@register:") {
 			console.log(lineId);
 
-			const myHeaders = {
-				"Content-Type": "application/json",
-			};
+			var myHeaders = new Headers();
+			myHeaders.append("Content-Type", "application/json");
 
 			var graphql = JSON.stringify({
 				query: "mutation($lineId:String!,$lineUserId:String!){\n  storeLineUserId(updateCustomerInput:{\n    id:1\n    lineId:$lineId\n    lineUserId:$lineUserId\n  }){\n    id\n  }\n}",
