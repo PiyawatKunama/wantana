@@ -1,4 +1,5 @@
 import https from "https";
+import http from "http";
 import express from "express";
 
 import fetch from "node-fetch";
@@ -100,8 +101,7 @@ app.post("/webhook", function (req, res) {
 				redirect: "follow",
 			};
 
-			https
-				.request("http://127.0.0.1:3000/graphql", requestOptions)
+			http.request("http://127.0.0.1:3000/graphql", requestOptions)
 				.then((response) => response.text())
 				.then((result) => console.log(result))
 				.catch((error) => console.log("error", error));
