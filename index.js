@@ -67,114 +67,58 @@ app.post("/test", (req, res) => {
 
 app.post("/webhook", function (req, res) {
 	res.send("https://linewantana.herokuapp.com/webhook");
-	const userId = req.body.events[0].source.userId;
-	var myHeaders = new Headers();
-	myHeaders.append(
-		"Authorization",
-		"Bearer 4q3VKFP+VtVmHbT3pwi1NMBfS0XM/+mOsl/pjGi8706ZTZnfTzU/xApq8cGDCeTo7NPe8vMz4DNIOuncCHbvMnvOXuvPQ0enwcmmhgUFBP69jDS43cKrNK3zGQZ7aARoy55SOfFttTqsicRpJzrMbAdB04t89/1O/w1cDnyilFU="
-	);
-
-	var requestOptions = {
-		method: "GET",
-		headers: myHeaders,
-		redirect: "follow",
-	};
-
-	fetch(`https://api.line.me/v2/bot/profile/${userId}`, requestOptions)
-		.then((response) => response.text())
-		.then((result) => {
-			if (req.body.events[0].type === "follow") {
-				const dataString = JSON.stringify({
-					to: userId,
-					messages: [
-						{
-							type: "text",
-							text: `สวัสดี คุณ ${result.displayName}
-							ขอบคุณที่เป็นเพื่อนกับ Santana`,
-						},
-						{
-							type: "text",
-							text: `หากท่านต้องการลงทะเบียนกับ Santana 
-							โปรดระบุ line ID ตามในตัวอย่าง ->  @register:YouLineID
-							`,
-						},
-					],
-				});
-
-				const headers = {
-					"Content-Type": "application/json",
-					Authorization: "Bearer " + TOKEN,
-				};
-
-				const webhookOptions = {
-					hostname: "api.line.me",
-					path: "/v2/bot/message/push",
-					method: "POST",
-					headers: headers,
-					body: dataString,
-				};
-
-				const request = https.request(webhookOptions, (res) => {
-					res.on("data", (d) => {
-						console.log(d);
-						process.stdout.write(d);
-					});
-				});
-
-				request.on("error", (err) => {
-					console.error(err);
-				});
-
-				request.write(dataString);
-				request.end();
-			}
-		})
-		.catch((error) => console.log("error", error));
 
 	if (req.body.events[0].type === "message") {
 		// Message data, must be stringified
+		const userId = req.body.events[0].source.userId;
+		var text = req.body.events[0].message.text;
+		var registerText = text.substring(0, 10);
 
-		const dataString = JSON.stringify({
-			to: req.body.events[0].source.userId,
-			messages: [
-				{
-					type: "text",
-					text: "Hello, world1",
-				},
-			],
-		});
+		if (registerText === "@register:") {
+			console.log("jimmy");
 
-		// Request header
-		const headers = {
-			"Content-Type": "application/json",
-			Authorization: "Bearer " + TOKEN,
-		};
-
-		// Options to pass into the request
-		const webhookOptions = {
-			hostname: "api.line.me",
-			path: "/v2/bot/message/push",
-			method: "POST",
-			headers: headers,
-			body: dataString,
-		};
-
-		// Define request
-		const request = https.request(webhookOptions, (res) => {
-			res.on("data", (d) => {
-				console.log(d);
-				process.stdout.write(d);
+			const dataString = JSON.stringify({
+				to: req.body.events[0].source.userId,
+				messages: [
+					{
+						type: "text",
+						text: "Hello, world1",
+					},
+				],
 			});
-		});
 
-		// Handle error
-		request.on("error", (err) => {
-			console.error(err);
-		});
+			// Request header
+			const headers = {
+				"Content-Type": "application/json",
+				Authorization: "Bearer " + TOKEN,
+			};
 
-		// Send data
-		request.write(dataString);
-		request.end();
+			// Options to pass into the request
+			const webhookOptions = {
+				hostname: "api.line.me",
+				path: "/v2/bot/message/push",
+				method: "POST",
+				headers: headers,
+				body: dataString,
+			};
+
+			// Define request
+			const request = https.request(webhookOptions, (res) => {
+				res.on("data", (d) => {
+					console.log(d);
+					process.stdout.write(d);
+				});
+			});
+
+			// Handle error
+			request.on("error", (err) => {
+				console.error(err);
+			});
+
+			// Send data
+			request.write(dataString);
+			request.end();
+		}
 	}
 });
 
