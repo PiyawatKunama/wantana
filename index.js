@@ -81,7 +81,7 @@ app.post("/webhook", function (req, res) {
 
 		if (registerText === "@register:") {
 			console.log(lineId);
-
+			console.log(userId);
 			const dataString = JSON.stringify({
 				to: req.body.events[0].source.userId,
 				messages: [
