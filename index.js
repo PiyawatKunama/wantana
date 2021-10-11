@@ -1,12 +1,5 @@
-import https from "https";
-import http from "http";
-import express from "express";
-
-import fetch from "node-fetch";
-
-if (!globalThis.fetch) {
-	globalThis.fetch = fetch;
-}
+const https = require("https");
+const express = require("express");
 
 const app = express();
 const PORT = process.env.PORT || 3800;
@@ -85,26 +78,31 @@ app.post("/webhook", function (req, res) {
 
 		if (registerText === "@register:") {
 			console.log(lineId);
+			var requests = require("request");
 
-			const myHeaders = {
-				"Content-Type": "application/json",
-			};
-
-			var graphql = JSON.stringify({
-				query: "mutation($lineId:String!,$lineUserId:String!){\n  storeLineUserId(updateCustomerInput:{\n    id:1\n    lineId:$lineId\n    lineUserId:$lineUserId\n  }){\n    id\n  }\n}",
-				variables: { lineId: lineId, lineUserId: userId },
-			});
-			var requestOptions = {
+			var options = {
 				method: "POST",
-				headers: myHeaders,
-				body: graphql,
-				redirect: "follow",
+				url: "http://localhost:3000/graphql",
+				headers: {
+					"Content-Type": "application/json",
+				},
+				body: JSON.stringify({
+					query: `mutation($lineId:String!,$lineUserId:String!){
+			  storeLineUserId(updateCustomerInput:{
+				id:1
+				lineId:$lineId
+				lineUserId:$lineUserId
+			  }){
+				id
+			  }
+			}`,
+					variables: { lineId: "jim", lineUserId: "wtf" },
+				}),
 			};
-
-			http.request("http://127.0.0.1:3000/graphql", requestOptions)
-				.then((response) => response.text())
-				.then((result) => console.log(result))
-				.catch((error) => console.log("error", error));
+			requests(options, function (error, response) {
+				if (error) throw new Error(error);
+				console.log(response.body);
+			});
 
 			const dataString = JSON.stringify({
 				to: req.body.events[0].source.userId,
