@@ -1,6 +1,7 @@
 const https = require("https");
 const express = require("express");
-const fetch = require("node-fetch");
+import fetch from "node-fetch";
+globalThis.fetch = fetch;
 const app = express();
 const PORT = process.env.PORT || 3800;
 
