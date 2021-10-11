@@ -72,9 +72,9 @@ app.post("/webhook", function (req, res) {
 	if (req.body.events[0].type === "follow") {
 		// Message data, must be stringified
 		// console.log(req);
-		console.log("jim", res);
-		console.log("jim", res.body);
-		console.log("jim", res.body.events);
+		console.log("jim", req);
+		console.log("jim", req.body);
+		console.log("jim", req.body.events);
 	}
 
 	if (req.body.events[0].type === "message") {
