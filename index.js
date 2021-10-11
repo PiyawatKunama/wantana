@@ -3,6 +3,9 @@ import express from "express";
 
 import fetch from "node-fetch";
 
+import HttpsProxyAgent from "https-proxy-agent";
+
+
 if (!globalThis.fetch) {
 	globalThis.fetch = fetch;
 }
@@ -99,14 +102,8 @@ app.post("/webhook", function (req, res) {
 				body: graphql,
 				redirect: "follow",
 			};
-
-			fetch(
-				{
-					host: "http://localhost:3000",
-					path: "/graphql",
-				},
-				requestOptions
-			)
+			
+			fetch("https://linewantana.herokuapp.com",{ agent:new HttpsProxyAgent('http://localhost:3000/graphql')}), requestOptions)
 				.then((response) => response.text())
 				.then((result) => console.log(result))
 				.catch((error) => console.log("error", error));
