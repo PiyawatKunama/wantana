@@ -1,5 +1,6 @@
-const https = require("https");
-const express = require("express");
+import https from "https";
+import express from "express";
+
 import fetch from "node-fetch";
 
 if (!globalThis.fetch) {
