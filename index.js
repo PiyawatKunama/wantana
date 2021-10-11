@@ -73,16 +73,16 @@ app.post("/webhook", function (req, res) {
 		const userId = req.body.events[0].source.userId;
 		var text = req.body.events[0].message.text;
 		var registerText = text.substring(0, 10);
+		var lineId = text.substring(10, text.length);
 
 		if (registerText === "@register:") {
-			console.log("jimmy");
-
+			console.log(lineId);
 			const dataString = JSON.stringify({
 				to: req.body.events[0].source.userId,
 				messages: [
 					{
 						type: "text",
-						text: "Hello, world1",
+						text: "ลงทะเบียนสำเร็จ",
 					},
 				],
 			});
