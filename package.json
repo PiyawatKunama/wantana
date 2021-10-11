@@ -4,7 +4,7 @@
 	"description": "",
 	"main": "index.js",
 	"type": "module",
-	"proxy": "http://localhost:3000",
+	"proxy": "http://127.0.0.1:3000",
 	"scripts": {
 		"start": "node index.js",
 		"test": "echo \"Error: no test specified\" && exit 1"
@@ -14,7 +14,6 @@
 	"license": "ISC",
 	"dependencies": {
 		"express": "^4.17.1",
-		"https-proxy-agent": "^5.0.0",
 		"node-fetch": "^3.0.0"
 	}
 }
