@@ -22,8 +22,6 @@ app.post("/test", (req, res) => {
 
 	var lineText = req.body.lineText;
 
-	console.log(lineText);
-
 	const dataString = JSON.stringify({
 		to: "Uddbbff589bee8cd87625b741ffb0becc",
 		messages: [
@@ -69,12 +67,15 @@ app.post("/test", (req, res) => {
 
 app.post("/webhook", function (req, res) {
 	res.send("https://linewantana.herokuapp.com/webhook");
-
 	// If the user sends a message to your bot, send a reply message
+
+	if (req.body.events[0].type === "follow") {
+		// Message data, must be stringified
+		console.log(req);
+	}
+
 	if (req.body.events[0].type === "message") {
 		// Message data, must be stringified
-		console.log("jimmy", req.body.events[0].source.userId);
-		console.log("jimmy", req.body);
 
 		const dataString = JSON.stringify({
 			to: req.body.events[0].source.userId,
