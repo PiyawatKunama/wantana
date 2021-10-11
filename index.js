@@ -1,6 +1,5 @@
 const https = require("https");
 const express = require("express");
-
 const app = express();
 const PORT = process.env.PORT || 3800;
 
@@ -69,6 +68,10 @@ app.post("/test", (req, res) => {
 app.post("/webhook", function (req, res) {
 	res.send("https://linewantana.herokuapp.com/webhook");
 
+	if (req.body.events[0].type === "follow") {
+		console.log("userId", req.body.events[0].source.userId);
+	}
+
 	if (req.body.events[0].type === "message") {
 		// Message data, must be stringified
 		const userId = req.body.events[0].source.userId;
@@ -78,31 +81,6 @@ app.post("/webhook", function (req, res) {
 
 		if (registerText === "@register:") {
 			console.log(lineId);
-			var requests = require("request");
-
-			var options = {
-				method: "POST",
-				url: "http://localhost:3000/graphql",
-				headers: {
-					"Content-Type": "application/json",
-				},
-				body: JSON.stringify({
-					query: `mutation($lineId:String!,$lineUserId:String!){
-			  storeLineUserId(updateCustomerInput:{
-				id:1
-				lineId:$lineId
-				lineUserId:$lineUserId
-			  }){
-				id
-			  }
-			}`,
-					variables: { lineId: "jim", lineUserId: "wtf" },
-				}),
-			};
-			requests(options, function (error, response) {
-				if (error) throw new Error(error);
-				console.log(response.body);
-			});
 
 			const dataString = JSON.stringify({
 				to: req.body.events[0].source.userId,
