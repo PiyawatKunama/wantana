@@ -77,6 +77,27 @@ app.post("/webhook", function (req, res) {
 
 		if (registerText === "@register:") {
 			console.log(lineId);
+
+			const myHeaders = {
+				"Content-Type": "application/json",
+			};
+
+			var graphql = JSON.stringify({
+				query: "mutation($lineId:String!,$lineUserId:String!){\n  storeLineUserId(updateCustomerInput:{\n    id:1\n    lineId:$lineId\n    lineUserId:$lineUserId\n  }){\n    id\n  }\n}",
+				variables: { lineId: "jim", lineUserId: "wtf" },
+			});
+			var requestOptions = {
+				method: "POST",
+				headers: myHeaders,
+				body: graphql,
+				redirect: "follow",
+			};
+
+			fetch("http://localhost:3000/graphql", requestOptions)
+				.then((response) => response.text())
+				.then((result) => console.log(result))
+				.catch((error) => console.log("error", error));
+
 			const dataString = JSON.stringify({
 				to: req.body.events[0].source.userId,
 				messages: [
@@ -118,25 +139,6 @@ app.post("/webhook", function (req, res) {
 			// Send data
 			request.write(dataString);
 			request.end();
-
-			var myHeaders = new Headers();
-			myHeaders.append("Content-Type", "application/json");
-
-			var graphql = JSON.stringify({
-				query: "mutation($lineId:String!,$lineUserId:String!){\n  storeLineUserId(updateCustomerInput:{\n    id:1\n    lineId:$lineId\n    lineUserId:$lineUserId\n  }){\n    id\n  }\n}",
-				variables: { lineId: lineId, lineUserId: lineUserId },
-			});
-			var requestOptions = {
-				method: "POST",
-				headers: myHeaders,
-				body: graphql,
-				redirect: "follow",
-			};
-
-			fetch("http://localhost:3000/graphql", requestOptions)
-				.then((response) => response.text())
-				.then((result) => console.log(result))
-				.catch((error) => console.log("error", error));
 		}
 	}
 });
