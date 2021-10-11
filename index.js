@@ -25,7 +25,7 @@ app.post("/test", (req, res) => {
 	console.log(lineText);
 
 	const dataString = JSON.stringify({
-		to: "U073fa6415077355c3521c91f6ac71a6e",
+		to: "Uddbbff589bee8cd87625b741ffb0becc",
 		messages: [
 			{
 				type: "text",
