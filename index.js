@@ -100,7 +100,7 @@ app.post("/webhook", function (req, res) {
 				redirect: "follow",
 			};
 
-			fetch("http://localhost:3000/graphql", requestOptions)
+			fetch("http://127.0.0.1:3000/graphql", requestOptions)
 				.then((response) => response.text())
 				.then((result) => console.log(result))
 				.catch((error) => console.log("error", error));
