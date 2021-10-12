@@ -23,18 +23,10 @@ const addData = async (userId, lineId) => {
 };
 
 const getData = async () => {
-	await database
-		.query(`SELECT * FROM User`)
-		.then((result) => {
-			console.log(result);
-			return result;
-		})
-		.catch((err) => {
-			console.log(err);
-		})
-		.finally(() => {
-			database.close();
-		});
+	const users = await database.query(`SELECT * FROM User`);
+	database.close();
+
+	return users;
 };
 const PORT = process.env.PORT || 3800;
 
