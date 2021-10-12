@@ -107,14 +107,7 @@ app.post("/webhook", function (req, res) {
 			const stringLineId = lineId.toString();
 			database
 				.query(
-					`INSERT INTO User(
-						userId,
-						lineId
-					) VALUES (
-						${stringUserId},
-						${stringLineId}
-					)
-					`
+					`INSERT INTO User (userId, lineId) VALUES (${stringUserId}, ${stringLineId})`
 				)
 				.then((res) => {
 					console.log(res);
