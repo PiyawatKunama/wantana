@@ -21,6 +21,20 @@ const addData = async (userId, lineId) => {
 			database.close();
 		});
 };
+
+const getData = async () => {
+	return await database
+		.query(`SELECT * FROM User`)
+		.then((res) => {
+			console.log(res);
+		})
+		.catch((err) => {
+			console.log(err);
+		})
+		.finally(() => {
+			database.close();
+		});
+};
 // const addData = async (userId, lineId) => {
 // 	await database
 // 		.query(
@@ -51,6 +65,10 @@ app.use(
 
 app.get("/", function (req, res) {
 	res.sendFile("test.html", { root: __dirname });
+});
+
+app.post("/allUser", async () => {
+	return await getData();
 });
 
 app.post("/test", (req, res) => {
