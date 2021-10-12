@@ -9,7 +9,7 @@ const database = new Prohairesis(env.CLEARDB_DATABASE_URL);
 const addData = async (userId, lineId) => {
 	await database
 		.query(
-			`INSERT INTO User (userId, lineId) VALUES (${stringUserId}, ${stringLineId})`
+			`INSERT INTO User (userId, lineId) VALUES (${userId}, ${lineId})`
 		)
 		.then((res) => {
 			console.log(res);
