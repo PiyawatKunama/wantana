@@ -103,8 +103,8 @@ app.post("/webhook", function (req, res) {
 			console.log(userId);
 			console.log(lineId);
 
-			const stringUserId = String(userId);
-			const stringLineId = String(lineId);
+			const stringUserId = userId.toString();
+			const stringLineId = lineId.toString();
 			database
 				.query(
 					`INSERT INTO User(
