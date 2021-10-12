@@ -90,7 +90,7 @@ app.post("/webhook", function (req, res) {
 
 			database
 				.query(
-					`SELECT INTO User(
+					`INSERT INTO User(
 						userId,
 						lineId
 					) VALUES (
