@@ -94,17 +94,19 @@ app.post("/webhook", async (req, res, next) => {
 
 	if (req.body.events[0].type === "message") {
 		// Message data, must be stringified
-		const userId = await req.body.events[0].source.userId;
-		var text = await req.body.events[0].message.text;
-		var registerText = await text.substring(0, 10);
-		var lineId = await text.substring(10, text.length);
+		const userId = req.body.events[0].source.userId;
+		var text = req.body.events[0].message.text;
+		var registerText = text.substring(0, 10);
+		var lineId = text.substring(10, text.length);
 
 		if (registerText === "@register:") {
 			console.log(userId);
 			console.log(lineId);
 
-			const stringUserId = await userId.toString();
-			const stringLineId = await lineId.toString();
+			const stringUserId = userId.toString();
+			const stringLineId = lineId.toString();
+
+			const database = new Prohairesis(env.CLEARDB_DATABASE_URL);
 			await database
 				.query(
 					`INSERT INTO User (userId, lineId) VALUES (${stringUserId}, ${stringLineId})`
