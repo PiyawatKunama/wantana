@@ -22,6 +22,20 @@ const addData = async (userId, lineId) => {
 		});
 };
 
+const getData = async () => {
+	await database
+		.query(`SELECT * FROM User`)
+		.then((result) => {
+			console.log(result);
+			return result;
+		})
+		.catch((err) => {
+			console.log(err);
+		})
+		.finally(() => {
+			database.close();
+		});
+};
 const PORT = process.env.PORT || 3800;
 
 const TOKEN =
@@ -39,18 +53,9 @@ app.get("/", function (req, res) {
 });
 
 app.post("/allUser", async (req, res) => {
-	await database
-		.query(`SELECT * FROM User`)
-		.then((result) => {
-			console.log(result);
-			res.send([result]);
-		})
-		.catch((err) => {
-			console.log(err);
-		})
-		.finally(() => {
-			database.close();
-		});
+	const Users = await getData();
+	console.log(Users);
+	res.send([Users]);
 });
 
 app.post("/test", (req, res) => {
