@@ -117,49 +117,48 @@ app.post("/webhook", async function (req, res) {
 				})
 				.finally(() => {
 					database.close();
+					const dataString = JSON.stringify({
+						to: req.body.events[0].source.userId,
+						messages: [
+							{
+								type: "text",
+								text: "ลงทะเบียนสำเร็จ",
+							},
+						],
+					});
+
+					// Request header
+					const headersLine = {
+						"Content-Type": "application/json",
+						Authorization: "Bearer " + TOKEN,
+					};
+
+					// Options to pass into the request
+					const webhookOptions = {
+						hostname: "api.line.me",
+						path: "/v2/bot/message/push",
+						method: "POST",
+						headers: headersLine,
+						body: dataString,
+					};
+
+					// Define request
+					const request = https.request(webhookOptions, (res) => {
+						res.on("data", (d) => {
+							console.log(d);
+							process.stdout.write(d);
+						});
+					});
+
+					// Handle error
+					request.on("error", (err) => {
+						console.error(err);
+					});
+
+					// Send data
+					request.write(dataString);
+					request.end();
 				});
-
-			const dataString = JSON.stringify({
-				to: req.body.events[0].source.userId,
-				messages: [
-					{
-						type: "text",
-						text: "ลงทะเบียนสำเร็จ",
-					},
-				],
-			});
-
-			// Request header
-			const headersLine = {
-				"Content-Type": "application/json",
-				Authorization: "Bearer " + TOKEN,
-			};
-
-			// Options to pass into the request
-			const webhookOptions = {
-				hostname: "api.line.me",
-				path: "/v2/bot/message/push",
-				method: "POST",
-				headers: headersLine,
-				body: dataString,
-			};
-
-			// Define request
-			const request = https.request(webhookOptions, (res) => {
-				res.on("data", (d) => {
-					console.log(d);
-					process.stdout.write(d);
-				});
-			});
-
-			// Handle error
-			request.on("error", (err) => {
-				console.error(err);
-			});
-
-			// Send data
-			request.write(dataString);
-			request.end();
 		}
 	}
 });
