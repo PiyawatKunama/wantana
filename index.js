@@ -1,6 +1,11 @@
 const https = require("https");
 const express = require("express");
 const app = express();
+const { Prohairesis } = require("prohairesis");
+const env = require("./env");
+
+const database = new Prohairesis(env.CLEARDB_DATABASE_URL);
+
 const PORT = process.env.PORT || 3800;
 
 const TOKEN =
@@ -80,8 +85,30 @@ app.post("/webhook", function (req, res) {
 		var lineId = text.substring(10, text.length);
 
 		if (registerText === "@register:") {
-			console.log(lineId);
 			console.log(userId);
+			console.log(lineId);
+
+			database
+				.query(
+					`SELECT INTO User(
+						userId,
+						lineId
+					) VALUES (
+						${userId},
+						${lineId}
+					)
+					`
+				)
+				.then((res) => {
+					console.log(res);
+				})
+				.catch((err) => {
+					console.log(err);
+				})
+				.finally(() => {
+					database.close();
+				});
+
 			const dataString = JSON.stringify({
 				to: req.body.events[0].source.userId,
 				messages: [
