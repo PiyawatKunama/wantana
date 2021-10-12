@@ -9,7 +9,7 @@ const database = new Prohairesis(env.CLEARDB_DATABASE_URL);
 const addData = async (userId, lineId) => {
 	await database
 		.query(
-			`INSERT INTO User (userId, lineId) VALUES (${userId}, ${lineId})`
+			`INSERT INTO User (userId, lineId) VALUES ('${userId}', '${lineId}')`
 		)
 		.then((res) => {
 			console.log(res);
@@ -21,6 +21,21 @@ const addData = async (userId, lineId) => {
 			database.close();
 		});
 };
+// const addData = async (userId, lineId) => {
+// 	await database
+// 		.query(
+// 			`INSERT INTO User (userId, lineId) VALUES (${userId}, ${lineId})`
+// 		)
+// 		.then((res) => {
+// 			console.log(res);
+// 		})
+// 		.catch((err) => {
+// 			console.log(err);
+// 		})
+// 		.finally(() => {
+// 			database.close();
+// 		});
+// };
 
 const PORT = process.env.PORT || 3800;
 
