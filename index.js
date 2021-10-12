@@ -85,7 +85,7 @@ app.post("/test", (req, res) => {
 	request.end();
 });
 
-app.post("/webhook", function (req, res) {
+app.post("/webhook", async function (req, res) {
 	res.send("https://linewantana.herokuapp.com/webhook");
 
 	if (req.body.events[0].type === "follow") {
@@ -105,7 +105,7 @@ app.post("/webhook", function (req, res) {
 
 			const stringUserId = userId.toString();
 			const stringLineId = lineId.toString();
-			database
+			await database
 				.query(
 					`INSERT INTO User (userId, lineId) VALUES (${stringUserId}, ${stringLineId})`
 				)
