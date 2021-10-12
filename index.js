@@ -6,6 +6,21 @@ const env = require("./env");
 
 const database = new Prohairesis(env.CLEARDB_DATABASE_URL);
 
+database
+	.query(
+		`SELECT * FROM User
+	`
+	)
+	.then((res) => {
+		console.log(res);
+	})
+	.catch((err) => {
+		console.log(err);
+	})
+	.finally(() => {
+		database.close();
+	});
+
 const PORT = process.env.PORT || 3800;
 
 const TOKEN =
@@ -88,14 +103,16 @@ app.post("/webhook", function (req, res) {
 			console.log(userId);
 			console.log(lineId);
 
+			const stringUserId = String(userId);
+			const stringLineId = String(lineId);
 			database
 				.query(
 					`INSERT INTO User(
 						userId,
 						lineId
 					) VALUES (
-						${userId},
-						${lineId}
+						${stringUserId},
+						${stringLineId}
 					)
 					`
 				)
