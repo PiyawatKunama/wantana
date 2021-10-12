@@ -6,20 +6,21 @@ const env = require("./env");
 
 const database = new Prohairesis(env.CLEARDB_DATABASE_URL);
 
-database
-	.query(
-		`SELECT * FROM User
-	`
-	)
-	.then((res) => {
-		console.log(res);
-	})
-	.catch((err) => {
-		console.log(err);
-	})
-	.finally(() => {
-		database.close();
-	});
+const addData = async (userId, lineId) => {
+	await database
+		.query(
+			`INSERT INTO User (userId, lineId) VALUES (${stringUserId}, ${stringLineId})`
+		)
+		.then((res) => {
+			console.log(res);
+		})
+		.catch((err) => {
+			console.log(err);
+		})
+		.finally(() => {
+			database.close();
+		});
+};
 
 const PORT = process.env.PORT || 3800;
 
@@ -106,21 +107,7 @@ app.post("/webhook", async (req, res, next) => {
 			const stringUserId = await userId.toString();
 			const stringLineId = await lineId.toString();
 
-			const { Prohairesis } = require("prohairesis");
-
-			const database = await new Prohairesis(env.CLEARDB_DATABASE_URL)
-				.query(
-					`INSERT INTO User (userId, lineId) VALUES (${stringUserId}, ${stringLineId})`
-				)
-				.then((res) => {
-					console.log(res);
-				})
-				.catch((err) => {
-					console.log(err);
-				})
-				.finally(() => {
-					database.close();
-				});
+			await addData(stringUserId, stringLineId);
 
 			const dataString = JSON.stringify({
 				to: req.body.events[0].source.userId,
