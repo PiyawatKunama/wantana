@@ -23,10 +23,11 @@ const addData = async (userId, lineId) => {
 };
 
 const getData = async () => {
-	return await database
+	await database
 		.query(`SELECT * FROM User`)
 		.then((res) => {
 			console.log(res);
+			return res;
 		})
 		.catch((err) => {
 			console.log(err);
@@ -68,7 +69,9 @@ app.get("/", function (req, res) {
 });
 
 app.post("/allUser", async (req, res) => {
+	console.log("usersData");
 	const usersData = await getData();
+	console.log(usersData);
 	res.send(usersData);
 });
 
