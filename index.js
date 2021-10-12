@@ -67,8 +67,9 @@ app.get("/", function (req, res) {
 	res.sendFile("test.html", { root: __dirname });
 });
 
-app.post("/allUser", async () => {
-	return await getData();
+app.post("/allUser", async (req, res) => {
+	const usersData = await getData();
+	res.send(usersData);
 });
 
 app.post("/test", (req, res) => {
